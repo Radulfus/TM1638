@@ -1,5 +1,5 @@
 # TM1638
-AVR ASM Library to drive TM1638 from Titan Micro Electronics. 
+AVR ASM Library to drive the TM1638 chip from Titan Micro Electronics. 
 
 TM1638 is an IC dedicated to LED (light emitting diode display) drive control and equipped
 with a keypad scan interface. It integrates MCU digital interface, data latch, LED drive, and
@@ -17,7 +17,7 @@ Features
 
 This project claims the development of a driver in AVR assembly language. 
 
-With Linux you can checkout the project as follows:
+Under Linux you can checkout the project as follows:
 
 > git clone https://github.com/Radulfus/TM1638.git
 
