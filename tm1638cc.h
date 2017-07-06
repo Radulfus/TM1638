@@ -55,13 +55,13 @@
 
 #ifdef BITBANGING						; ports bitbanging
 
-.EQU	PORT_TM1638		=	PORTB
-.EQU	PIN_TM1638		=	PINB
-.EQU	DDR_TM1638		=	DDRB
+.EQU	PORT_TM1638		=	PORTA
+.EQU	PIN_TM1638		=	PINA
+.EQU	DDR_TM1638		=	DDRA
 
-.EQU	STB_PIN			=	PA4			; TM1638 strobe input
-.EQU	CLK_PIN			=	PA7			; TM1638 clock input
-.EQU	DATA_PIN		=	PA5			; TM1638 data input/output
+.EQU	STB_PIN			=	PA0			; TM1638 strobe input
+.EQU	CLK_PIN			=	PA1			; TM1638 clock input
+.EQU	DATA_PIN		=	PA2			; TM1638 data input/output
 
 #else									; ports hardware-SPI
 
