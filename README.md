@@ -29,4 +29,4 @@ Upload to the MCU:
 
 > avrdude -c usbasp -p m32 -P usb -U flash:w:tm1638cc.hex
 
-In the example above I use an ATMega32.
+In the example above I use an ATMega32 an an USBASP.
