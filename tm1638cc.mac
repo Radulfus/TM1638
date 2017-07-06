@@ -1,0 +1,44 @@
+;=======================================================================
+; tm1638cc.mac
+; Assembler macros for tm1638 library
+; 
+; written by Ralf Jardon (cosmicos@gmx.net), May-July 2017
+;
+; License: GNU GENERAL PUBLIC LICENSE, Version 3, 29 June 2007
+;
+; Version: 0.1
+;=======================================================================
+
+.MACRO	TM1638_CLK_LOW						; Clock output low
+	cbi	PORT_TM1638, CLK_PIN
+.ENDMACRO
+
+.MACRO	TM1638_CLK_HIGH						; Clock output high
+	sbi	PORT_TM1638, CLK_PIN
+.ENDMACRO
+
+.MACRO	TM1638_STB_LOW						; Strobe output low
+	cbi	PORT_TM1638, STB_PIN
+.ENDMACRO
+
+.MACRO	TM1638_STB_HIGH						; Strobe output high
+	sbi	PORT_TM1638, STB_PIN
+.ENDMACRO
+
+.MACRO	TM1638_DATA_LOW						; Data input low
+	cbi	PORT_TM1638, DATA_PIN
+.ENDMACRO
+
+.MACRO	TM1638_DATA_HIGH					; Data input high
+	sbi	PORT_TM1638, DATA_PIN
+.ENDMACRO
+
+.MACRO	TM1638_CLK_LOW_DATA_LOW				; Data & Clock input high
+	ldi	AKKU2, (0<<CLK_PIN)|(0<<DATA_PIN)	; contemporaneous
+	out	PORT_TM1638, AKKU2
+.ENDMACRO
+
+.MACRO	TM1638_CLK_LOW_DATA_HIGH			; Data input high, Clock
+	ldi	AKKU2, (0<<CLK_PIN)|(1<<DATA_PIN)	; input low contemporaneous
+	out	PORT_TM1638, AKKU2
+.ENDMACRO
