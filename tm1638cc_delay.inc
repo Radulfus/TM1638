@@ -6,7 +6,7 @@
 ;
 ; License: GNU GENERAL PUBLIC LICENSE, Version 3, 29 June 2007
 ;
-; Version: 0.1
+; Version: 0.9beta
 ;=======================================================================
 
 .equ	c1us	= (1*fck)/4000 - 1
