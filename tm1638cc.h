@@ -2,14 +2,15 @@
 ; tm1638cc.h
 ; Header file for tm1638 library
 ;
-; written by Ralf Jardon (cosmicos@gmx.net), May-July 2017
+; written by Ralf Jardon (cosmicos at gmx dot net), May-July 2017
 ;
 ; License: GNU GENERAL PUBLIC LICENSE, Version 3, 29 June 2007
 ;
-; Version: 0.9beta
+; Version: 0.9beta-2
 ;=======================================================================
 
-.INCLUDE "m32def-nopragma.inc"
+;.INCLUDE "m32def-nopragma.inc"
+.INCLUDE "m168def.inc"
 
 ;=======================================================================
 ;	Assembler definitions
@@ -55,13 +56,13 @@
 
 #ifdef BITBANGING						; ports bitbanging
 
-.EQU	PORT_TM1638		=	PORTA
-.EQU	PIN_TM1638		=	PINA
-.EQU	DDR_TM1638		=	DDRA
+.EQU	PORT_TM1638		=	PORTC
+.EQU	PIN_TM1638		=	PINC
+.EQU	DDR_TM1638		=	DDRC
 
-.EQU	STB_PIN			=	PA0			; TM1638 strobe input
-.EQU	CLK_PIN			=	PA1			; TM1638 clock input
-.EQU	DATA_PIN		=	PA2			; TM1638 data input/output
+.EQU	STB_PIN			=	PC0			; TM1638 strobe input
+.EQU	CLK_PIN			=	PC1			; TM1638 clock input
+.EQU	DATA_PIN		=	PC2                                     
 
 #else									; ports hardware-SPI
 

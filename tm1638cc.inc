@@ -3,13 +3,13 @@
 ; Library to drive the special circuit for LED control TM1638 
 ; from Titan Micro Electronics (TM)
 ;
-; written by Ralf Jardon (cosmicos@gmx.net), May-July 2017
+; written by Ralf Jardon (cosmicos at gmx dot net), May-July 2017
 ;
 ; Comments related to the datasheet refer to version 1.3 (en)
 ;
 ; License: GNU GENERAL PUBLIC LICENSE, Version 3, 29 June 2007
 ;
-; Version: 0.9beta
+; Version: 0.9beta-2
 ;=======================================================================
 
 ;=======================================================================
@@ -17,7 +17,8 @@
 ;=======================================================================
 
 TM1638_INIT:
-										; initialize Ports
+
+; initialize Ports
 
 	ldi 	AKKU, (1<<STB_PIN) | (1<<CLK_PIN) | (1<<DATA_PIN)
 	out		DDR_TM1638, AKKU
@@ -33,15 +34,16 @@ TM1638_INIT:
 	ldi		AKKU, (1<<SPI2X)
 	out		SPSR, AKKU
 
-#endif	
-										; initialize TM1638
+#endif
+
+; initialize TM1638
 
 	ldi		TM1638_DATA_BYTE, DATA_CMD + WRITE_DATA
 	rcall	TM1638_SEND_COMMAND
 
 	ldi		TM1638_DATA_BYTE, DISP_CTRL_CMD + DISP_ON + DISP_PWM_MASK
 	rcall	TM1638_SEND_COMMAND
-	
+
 	rcall 	TM1638_CLEAR				; clear Display Memory
 
 	ret
@@ -241,7 +243,6 @@ DEC_SEGM1:
 ;=======================================================================
 
 TM1638_PRINT_HEX:
-
 	swap	AKKU
 	ldi		TM1638_GRID_BYTE, 0x0C
 	rcall	hex_digit
@@ -267,10 +268,10 @@ hex_digit_1:
 ;=======================================================================
 
 TM1638_PRINT_BIN:
-
 	push	AKKU
 	push	AKKU2
 	push	AKKU3
+	push	TM1638_GRID_BYTE
 
 	mov		AKKU2, AKKU;
 	ldi		TM1638_GRID_BYTE, 0x00		; Segment start-address    
@@ -298,6 +299,7 @@ bin_out:
 	rjmp	bin_number_loop;
 
 bin_number_ende:
+	pop		TM1638_GRID_BYTE
 	pop		AKKU3
 	pop		AKKU2
 	pop		AKKU
@@ -309,7 +311,6 @@ bin_number_ende:
 ;=======================================================================
 
 TM1638_PRINT_CHAR:
-
 	push	ZH
 	push	ZL
 	push	ZCODE
@@ -345,17 +346,18 @@ number:
 ;=======================================================================
 
 TM1638_PRINT_TEXT:
+	push	AKKU3
 	push	AKKU
 
-	ldi		ZL, LOW(MOVETEXT*2)			; load text start address
-	ldi		ZH, HIGH(MOVETEXT*2)
+	ldi		ZL, LOW(PRINTTEXT*2)	; load text start address
+	ldi		ZH, HIGH(PRINTTEXT*2)
 
 	ldi		TM1638_GRID_BYTE, 0x00	; first segment
 
 select_textblock_print:
 	cpi		AKKU3, 0
 	breq	print_text_loop
-	adiw	ZL, TEXT_BLOCK		; each TEXT_BLOCK has 32 chars
+	adiw	ZL, 10,					; each TEXT_BLOCK has 10 chars
 									; calculate address of current block
 	dec		AKKU3
 	rjmp	select_textblock_print
@@ -374,6 +376,7 @@ print_text_loop:
 
 text_end:
 	pop		AKKU
+	pop		AKKU3
 	ret
 
 ;=======================================================================
@@ -383,6 +386,7 @@ text_end:
 
 TM1638_PRINT_MOVETEXT:
 	push	COUNT
+	push	AKKU3
 	push	AKKU2
 	push	AKKU
 
@@ -414,16 +418,19 @@ move_display_loop:
 
 	rcall	Delay100ms				; text loop
 	rcall	Delay100ms
+	rcall	TM1638_POLL_KEYPAD
 	clr		COUNT
-	sbiw	ZL, 7					; add 7 (8-1) to shift display 
+	sbiw	ZL, 7					; sub 7 (8-1) to shift display 
 	inc		AKKU2
 	cpi		AKKU2, TEXT_BLOCK-8
 	breq	move_text_end
 	rjmp	move_display_loop
 
 move_text_end:
+
 	pop		AKKU
 	pop		AKKU2
+	pop		AKKU3
 	pop		COUNT
 	ret
 

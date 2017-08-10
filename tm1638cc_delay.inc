@@ -2,7 +2,7 @@
 ; tm1638cc_delay.inc
 ; delay routines for tm1638 library
 ; 
-; written by Ralf Jardon (cosmicos@gmx.net), May-July 2017
+; written by Ralf Jardon (cosmicos at gmx dot net), May-July 2017
 ;
 ; License: GNU GENERAL PUBLIC LICENSE, Version 3, 29 June 2007
 ;

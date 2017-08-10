@@ -1,13 +1,13 @@
 ;=======================================================================
 ; tm1638cc.asm
 ; Examples of usage for tm1638 library
-; written by Ralf Jardon (cosmicos@gmx.net), May-July 2017
+; written by Ralf Jardon (cosmicos at gmx dot net), May-July 2017
 ;
 ; Comments related to the datasheet refer to version 1.3 (en)
 ;
 ; License: GNU GENERAL PUBLIC LICENSE, Version 3, 29 June 2007
 ;
-; Version: 0.9beta
+; Version: 0.9beta-2
 ;=======================================================================
 
 .NOLIST
@@ -85,7 +85,7 @@ tw2_loop:
 	
 ;=======================================================================
 
-	ldi		AKKU3, 4					; Textblock "LEDS DIM"
+	ldi		AKKU3, 0					; Textblock "LEDS DIM"
 	rcall	TM1638_PRINT_TEXT
 
 	ldi		AKKU2, 4
@@ -291,6 +291,7 @@ twistloop2:
 	ret
 
 .INCLUDE "tm1638cc.inc"
+.INCLUDE "tm1638cc_input.asm"
 .INCLUDE "tm1638cc_delay.inc"
 .INCLUDE "tm1638cc_font.inc"
 
@@ -299,6 +300,11 @@ MOVETEXT:
 .db "          BINARY COUNTER           ",0	; TEXT_BLOCK 1
 .db "       HEXADECIMAL COUNTER         ",0	; TEXT_BLOCK 2
 .db "         DECIMAL COUNTER           ",0	; TEXT_BLOCK 3
-.db "LEDS DIM",0,0							; TEXT_BLOCK 4
+.db "          PRESS BUTTON             ",0	; TEXT_BLOCK 4
+
+PRINTTEXT:
+.db "LEDS DIM",0,0							; TEXT_BLOCK 0
+.db "BUTTON  ",0,0							; TEXT_BLOCK 1
+.db "        ",0,0							; TEXT_BLOCK 2
 
 .EXIT
