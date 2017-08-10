@@ -9,7 +9,6 @@
 # 
 # Requirements: Linux with GNU coreutils, bash and wine!
 #
-#
 # License: GPLv3
 # v0.5
 
