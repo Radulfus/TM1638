@@ -17,9 +17,13 @@ Features
 
 This project claims the development of a driver in AVR assembly language. 
 
-Under Linux you can checkout the project as follows:
+Under Linux you can clone the project as follows:
 
 > git clone https://github.com/Radulfus/TM1638.git
+
+If you want to clone the sAVR branch please use:
+
+> git clone https://github.com/Radulfus/TM1638.git  --branch sAVR
 
 Assemble:
 
@@ -29,4 +33,9 @@ Upload to the MCU:
 
 > avrdude -c usbasp -p m32 -P usb -U flash:w:tm1638cc.hex
 
-In the example above I use an ATMega32 and a USBASP.
+In the example above I use ATMega32/ATMega168 and a USBASP.
+
+The branch sAVR uses a precompiler (s'AVR) from Eberhard Haug. This nice
+tool allows structured AVR ASM programming. For Details take a look at:
+http://led-treiber.de/html/s-avr.html
+
