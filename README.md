@@ -39,3 +39,5 @@ The branch sAVR uses a precompiler (s'AVR) from Eberhard Haug. This nice
 tool allows structured AVR ASM programming. For Details take a look at:
 http://led-treiber.de/html/s-avr.html
 
+The bash-script EasyBuild.sh allows a comfortable workflow with s'AVR
+under Linux.
