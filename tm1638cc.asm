@@ -7,7 +7,7 @@
 ;
 ; License: GNU GENERAL PUBLIC LICENSE, Version 3, 29 June 2007
 ;
-; Version: 0.9beta-2
+; Version: 1.0beta-1
 ;=======================================================================
 
 .NOLIST
@@ -22,9 +22,10 @@
 
 .ORG INT_VECTORS_SIZE					; Placeholder Interrupt Vectors
 
+
 ;=======================================================================
-;							Mainloop
-; 
+;	Initialisation
+;	THIS IS REQUIRED - DONT CHANGE
 ;=======================================================================
 
 INIT:
@@ -35,59 +36,114 @@ INIT:
 	out 	SPL, AKKU
 	rcall	TM1638_INIT 				; Initialize Ports, SPI & TM1638
 
+;=======================================================================
+;	Mainloop
+;	EXAMPLES OF LIBRARY USAGE - You can change whatever you want
+;=======================================================================
+
 MAINLOOP:
 
-;=======================================================================
+	rcall	TM1638_CLEAR
+	ldi		AKKU3, 0					; Textblock "TM1638 DEMO"
+	rcall	TM1638_PRINT_MOVETEXT
 
-ldi		COUNT, 3						; move LEDs
-tw0_loop:	
-	rcall	TM1638_LEDS_R
+restart_loop:
+	rcall	TM1638_CLEAR
+	ldi		AKKU3, 6					; Textblock "PLEASE PRESS A BUTTON"
+	rcall	TM1638_PRINT_MOVETEXT
+	clr		BUTTONS
+
+not_pressed:
+
+	rcall	TM1638_POLL_KEYPAD			; check buttons
+
+	tst		BUTTONS
+	breq	not_pressed
+
+	mov 	AKKU, BUTTONS
+	cpi		AKKU, BUTTON8
+	brne	b7;
+; button8 pressed
+	rcall	TM1638_CLEAR
+	ldi		AKKU3, 1					; Textblock "RUNNING LIGHTS"
+	rcall	TM1638_PRINT_MOVETEXT
+	rcall	TM1638_CLEAR
 	rcall	TM1638_LEDS_L
-	dec 	COUNT
-	brne	tw0_loop
+	rcall	TM1638_LEDS_R
+	rjmp	restart_loop
 
-;=======================================================================
+b7:
+	cpi		AKKU, BUTTON7
+	brne	b6;
+; button7 pressed
+	rcall	TM1638_CLEAR
+	ldi		AKKU3, 3					; Textblock "BINARY COUNTER"
+	rcall	TM1638_PRINT_MOVETEXT
+	rcall	TM1638_CLEAR
+	rcall	TM1638_COUNT_BIN
+	rjmp	restart_loop
 
+b6:
+	cpi		AKKU, BUTTON6
+	brne	b5;
+; button6 pressed
+	rcall	TM1638_CLEAR
+	ldi		AKKU3, 4					; Textblock "HEXADECIMAL COUNTER"
+	rcall	TM1638_PRINT_MOVETEXT
+	rcall	TM1638_CLEAR
+	rcall	TM1638_COUNT_HEX
+	rjmp	restart_loop
+
+b5:
+	cpi		AKKU, BUTTON5
+	brne	b4;
+; button5 pressed
+	rcall	TM1638_CLEAR
+	ldi		AKKU3, 5					; Textblock "DECIMAL COUNTER"
+	rcall	TM1638_PRINT_MOVETEXT
+	rcall	TM1638_CLEAR
+	rcall	TM1638_COUNT_DEC
+	rjmp	restart_loop
+
+b4:
+	cpi		AKKU, BUTTON4
+	brne	b3;
+; button4 pressed
+	rcall	TM1638_CLEAR
+	ldi		AKKU3, 2					; Textblock "TWIST SEGMENTS"
+	rcall	TM1638_PRINT_MOVETEXT
+	rcall	TM1638_CLEAR
 	ldi		COUNT, 3					; twist cw
 tw_loop:	
 	rcall	TM1638_TWIST_CW
 	dec 	COUNT
 	brne	tw_loop
-	rcall	TM1638_CLEAR
-	
-;=======================================================================
 
 	ldi		COUNT, 3					; twist ccw
-tw2_loop:	
+tw_loop1:	
 	rcall	TM1638_TWIST_CCW
 	dec 	COUNT
-	brne	tw2_loop
+	brne	tw_loop1
 	rcall	TM1638_CLEAR
-	
-;=======================================================================
+	rjmp	restart_loop
 
-	clr		AKKU3						; Textblock "TM1638 DEMO"
+b3:
+	cpi		AKKU, BUTTON3
+	brne	b2;
+; button3 pressed
+	rcall	TM1638_CLEAR
+	ldi		AKKU3, 7					; Textblock "CODE COMES WITH GPL V3"
 	rcall	TM1638_PRINT_MOVETEXT
+	rcall	TM1638_CLEAR
 
-	rcall	TM1638_LEDS_L
-	rcall	TM1638_LEDS_R
+	rjmp	restart_loop
 
-;=======================================================================
-
-	ldi		AKKU3, 2					; Textblock "HEXACECIMAL COUNTER"
-	rcall	TM1638_PRINT_MOVETEXT
-
-	rcall	TM1638_COUNT_HEX
-	rcall	Delay1s
-
-	rcall	TM1638_LEDS_L
-	rcall	TM1638_LEDS_R
-	
-;=======================================================================
-
+b2:
+	cpi		AKKU, BUTTON2
+	brne	b1;
+; button2 pressed
 	ldi		AKKU3, 0					; Textblock "LEDS DIM"
 	rcall	TM1638_PRINT_TEXT
-
 	ldi		AKKU2, 4
 dm0_loop:
 	ldi		COUNT, 7					; DIM LEDs
@@ -104,30 +160,18 @@ dm_loop:
 	
 	ldi		AKKU, DISP_PWM_MASK			; restore brightness settings
 	rcall	TM1638_BRIGHTNESS
-	
-;=======================================================================
+	rjmp	restart_loop
 
-	ldi		AKKU3, 1					; Textblock "BINARY COUNTER"
-	rcall	TM1638_PRINT_MOVETEXT
 
-	rcall	TM1638_COUNT_BIN
-	rcall	Delay1s
+b1:
+; button1 pressed
 
-	rcall	TM1638_LEDS_L
-	rcall	TM1638_LEDS_R
+
+	rjmp	MAINLOOP
 
 ;=======================================================================
-
-	ldi		AKKU3, 3					; Textblock "DECIMAL COUNTER"
-	rcall	TM1638_PRINT_MOVETEXT
-
-	rcall	TM1638_COUNT_DEC
-	rcall	Delay1s
-	rcall	TM1638_LEDS_L
-	rcall	TM1638_LEDS_R
-
-	rjmp		MAINLOOP
-
+; Functions for Mainloop
+;=======================================================================
 ;
 ; LED chain right
 ;
@@ -297,14 +341,17 @@ twistloop2:
 
 MOVETEXT:
 .db "            TM1638 DEMO            ",0	; TEXT_BLOCK 0
-.db "          BINARY COUNTER           ",0	; TEXT_BLOCK 1
-.db "       HEXADECIMAL COUNTER         ",0	; TEXT_BLOCK 2
-.db "         DECIMAL COUNTER           ",0	; TEXT_BLOCK 3
-.db "          PRESS BUTTON             ",0	; TEXT_BLOCK 4
+.db "           RUNNING LIGHT           ",0	; TEXT_BLOCK 1
+.db "          TWIST SEGMENTS           ",0	; TEXT_BLOCK 2
+.db "          BINARY COUNTER           ",0	; TEXT_BLOCK 3
+.db "       HEXADECIMAL COUNTER         ",0	; TEXT_BLOCK 4
+.db "         DECIMAL COUNTER           ",0	; TEXT_BLOCK 5
+.db "              PLEASE PRESS A BUTTON",0	; TEXT_BLOCK 6
+.db "       CODE COMES WITH GPL V3      ",0	; TEXT_BLOCK 7
 
 PRINTTEXT:
 .db "LEDS DIM",0,0							; TEXT_BLOCK 0
-.db "BUTTON  ",0,0							; TEXT_BLOCK 1
+.db "A BUTTON",0,0							; TEXT_BLOCK 1
 .db "        ",0,0							; TEXT_BLOCK 2
 
 .EXIT

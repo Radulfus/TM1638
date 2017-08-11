@@ -6,7 +6,7 @@
 ;
 ; License: GNU GENERAL PUBLIC LICENSE, Version 3, 29 June 2007
 ;
-; Version: 0.9beta-2
+; Version: 1.0beta-1
 ;=======================================================================
 
 ;.INCLUDE "m32def-nopragma.inc"
@@ -50,6 +50,19 @@
 .EQU	CHAR_OFFSET		=	0x07
 .EQU	TEXT_BLOCK		=	36
 
+;
+;	Buttons from "LED&KEYS" Board
+;
+
+.EQU	BUTTON1			= 0b10000000
+.EQU	BUTTON2			= 0b01000000
+.EQU	BUTTON3			= 0b00100000
+.EQU	BUTTON4			= 0b00010000
+.EQU	BUTTON5			= 0b00001000
+.EQU	BUTTON6			= 0b00000100
+.EQU	BUTTON7			= 0b00000010
+.EQU	BUTTON8			= 0b00000001
+
 ;=======================================================================
 ;	TM1638 Port configuration
 ;=======================================================================
@@ -81,6 +94,7 @@
 ;=======================================================================
 
 .DEF	ZCODE			=	r0
+.DEF	BUTTONS			=	r1
 .DEF	AKKU			=	r16			; akkumulator
 .DEF	AKKU2			=	r17
 .DEF	AKKU3			=	r18
