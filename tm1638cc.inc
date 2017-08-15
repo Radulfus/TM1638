@@ -239,28 +239,57 @@ DEC_SEGM1:
 	ret
 
 ;=======================================================================
-; TM1638_PRINT_HEX 8 bit from AKKU
+; TM1638_PRINT_HEX 16 bit 
+; AKKU2 (low Byte) / AKKU3 (high Byte)
+; improved version by Eberhard Haug
 ;=======================================================================
 
 TM1638_PRINT_HEX:
-	swap	AKKU
-	ldi		TM1638_GRID_BYTE, 0x0C
+
+	push	AKKU3
+	push	AKKU2
+	push	AKKU
+	swap	AKKU3					; higher nibble
+	ldi		TM1638_GRID_BYTE, 0x08	; digit position 4
+	rcall	hex_digith
+	swap	AKKU3					; lower nibble
+	ldi		TM1638_GRID_BYTE, 0x0A	; digit position 3
+	rcall	hex_digith
+	swap	AKKU2					; higher nibble
+	ldi		TM1638_GRID_BYTE, 0x0C	; digit position 2
 	rcall	hex_digit
-	swap	AKKU
-	ldi		TM1638_GRID_BYTE, 0x0E
+	swap	AKKU2					; lower nibble
+	ldi		TM1638_GRID_BYTE, 0x0E	; digit position 1
+	rcall	hex_digit
+	pop		AKKU
+	pop		AKKU2
+	pop		AKKU3
+	ret
+
+hex_digith:
+	push	AKKU3
+	andi	AKKU3, $0F				; mask off nibble
+	CPI	AKKU3,10
+	BRLO	_I47
+	subi	AKKU3, -('A'-'9'-1)
+_I47:
+	subi	AKKU3, -'0'
+	mov		TM1638_SEGM_BYTE, AKKU3
+	rcall	TM1638_PRINT_CHAR
+	pop		AKKU3
+	ret
 
 hex_digit:
-	push	AKKU
-	andi	AKKU, $0F
-	cpi		AKKU, 10
-	brlt	hex_digit_1
-	subi	AKKU, -( 'A' - '9' - 1 ) 
-
-hex_digit_1:
-	subi	AKKU, -'0'
-	mov		TM1638_SEGM_BYTE, AKKU
+	push	AKKU2
+	andi	AKKU2, $0F				; mask off nibble
+	CPI	AKKU2,10
+	BRLO	_I50
+	subi	AKKU2, -('A'-'9'-1)
+_I50:
+	subi	AKKU2, -'0'
+	mov		TM1638_SEGM_BYTE, AKKU2
 	rcall	TM1638_PRINT_CHAR
-	pop		AKKU
+	pop		AKKU2
 	ret
 
 ;=======================================================================
