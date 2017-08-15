@@ -235,15 +235,23 @@ binloop:
 ;
 
 TM1638_COUNT_HEX:
-	push	AKKU
-	clr		AKKU
-hexloop:
-	rcall	TM1638_PRINT_HEX			; print value in AKKU
-	rcall	Delay100ms
-	inc		AKKU
-	cpi		AKKU, 0x00
-	brne	hexloop
-	pop		AKKU
+	push	AKKU2
+	push	AKKU3
+	ldi		XL,HIGH(0)
+	ldi		XH,LOW(0)
+z1loop:
+	mov		AKKU2, XL
+	mov		AKKU3, XH
+	rcall	TM1638_PRINT_HEX			; print values in AKKU2 and AKKU3
+										; as 16 bit number (LO and HI-Byte)
+	rcall 	Delay10ms
+	cpi 	XH, 11
+	breq	stop1_counting
+	adiw 	XH:XL,1	
+	brne 	z1loop
+stop1_counting:
+	pop		AKKU3
+	pop		AKKU2
 	ret
 
 ;
