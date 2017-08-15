@@ -18,10 +18,10 @@
 
 .CSEG
 .ORG $0000
-	rjmp 	INIT						; Reset Vektor
 
-.ORG INT_VECTORS_SIZE					; Placeholder Interrupt Vectors
+.INCLUDE "tm1638cc_interrupt_vectors.inc"; Interrupt Vectors
 
+.ORG $100
 
 ;=======================================================================
 ;	Initialisation
@@ -164,8 +164,7 @@ dm_loop:
 
 
 b1:
-; button1 pressed
-
+; button1 pressed, back to the beginning "TM1638 DEMO"
 
 	rjmp	MAINLOOP
 
