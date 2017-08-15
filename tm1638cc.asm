@@ -18,9 +18,10 @@
 
 .CSEG
 .ORG $0000
-	rjmp 	INIT						; Reset Vektor
 
-.ORG INT_VECTORS_SIZE					; Placeholder Interrupt Vectors
+.INCLUDE "tm1638cc_interrupt_vectors.inc"; Interrupt Vectors
+
+.ORG $100
 
 
 ;=======================================================================

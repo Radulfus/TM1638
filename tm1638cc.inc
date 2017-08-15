@@ -327,8 +327,11 @@ TM1638_PRINT_CHAR:
 
 number:
 	add		ZL, TM1638_SEGM_BYTE		; select char address
+	brcc	load_char
+	inc		ZH
+
+load_char:
 	lpm									; load r0=ZCODE with char
-	sub		ZL, TM1638_SEGM_BYTE		; reset char address
 
 	mov		TM1638_SEGM_BYTE, ZCODE
 	rcall	TM1638_SEND_DATA			; send data

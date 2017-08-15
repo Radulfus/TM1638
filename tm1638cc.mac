@@ -34,11 +34,12 @@
 .ENDMACRO
 
 .MACRO	TM1638_CLK_LOW_DATA_LOW				; Data & Clock input high
-	ldi	AKKU2, (0<<CLK_PIN)|(0<<DATA_PIN)	; contemporaneous
-	out	PORT_TM1638, AKKU2
+	ldi	DTMP, (0<<CLK_PIN)|(0<<DATA_PIN)	; contemporaneous
+	out	PORT_TM1638, DTMP
 .ENDMACRO
 
 .MACRO	TM1638_CLK_LOW_DATA_HIGH			; Data input high, Clock
-	ldi	AKKU2, (0<<CLK_PIN)|(1<<DATA_PIN)	; input low contemporaneous
-	out	PORT_TM1638, AKKU2
+	ldi	DTMP, (0<<CLK_PIN)|(1<<DATA_PIN)	; input low contemporaneous
+	out	PORT_TM1638, DTMP
 .ENDMACRO
+
